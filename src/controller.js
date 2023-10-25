@@ -23,7 +23,9 @@ class LibroController{
         try{
         const libro = req.body;
         const [result] = await pool.query('INSERT INTO libros (nombre, autor, categoria, año_publicacion, ISBN) VALUES (?,?,?,?,?)',[libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN]);
-        res.json({"id insertado": result.insertId});
+        if (result.length==0) {
+            throw new error('Datos incorrectos');
+        }res.json({"id insertado": result.insertId});
         }catch (error){
             console.log(error);
             res.status(404).json({error:'Error al agregar libro, verifique los datos ingresados.'});
@@ -34,7 +36,9 @@ class LibroController{
         try{
         const libro = req.body;
         const [result] = await pool.query('DELETE FROM libros WHERE ISBN=(?)',[libro.ISBN]);
-        res.json({"Registros Eliminado": result.affectedRows});
+        if (result.length==0) {
+            throw new error('error al eliminar.');
+        }res.json({"Registros Eliminado": result.affectedRows});
     }catch (error){
         console.log(error);
         res.status(404).json({error: 'Error al eliminar libro ISNB inexistente.'});
@@ -45,7 +49,9 @@ class LibroController{
         try{
         const libro = req.body;
         const [result] = await pool.query(`UPDATE libros SET nombre=(?),autor=(?),categoria=(?),año_publicacion=(?),ISBN=(?) WHERE id=(?)`,[libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN, libro.id]);
-        res.json({"Registros Actualizados": result.changedRows});
+        if (result.length==0) {
+            throw new error('error al actualizar.');
+        }res.json({"Registros Actualizados": result.changedRows});
         }catch(error){
             console.log(error);
             res.status(500).json({error:'Error al actualizar libro.'});
