@@ -5,7 +5,7 @@ import {libros} from './controller.js';
 export const router = Router()
 
 router.get('/libros',libros.getAll);
-router.get('/libroId/id',libros.getOne);
+router.get('/libroId/:id',libros.getOne);
 router.post('/agregarLibro',libros.add);
 router.delete('/eliminarLibro',libros.delete);
 router.put('/actualizarLibro',libros.update);
